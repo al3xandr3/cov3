@@ -59,11 +59,11 @@ repository, typically: ~/.m2/repository/
 
 Then from a new project.clj just include it, like:
 
-#+BEGIN_SRC clojure
+#+BEGIN_EXAMPLE
 (defproject myproj "1.0.0"
   :dependencies [[cov3/cov3 "1.0.0"]]
   ...)
-#+END_SRC
+#+END_EXAMPLE
 
 * Documentation
 
