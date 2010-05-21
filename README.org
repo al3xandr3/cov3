@@ -1,7 +1,7 @@
 * cov3
 
 This is a crawler library, with 3 diferent flavors of crawlers:
-- the usual crawler, give him a url, and he keeps on going until
+- the usual crawler, give him a url, and keeps on going until
   he checks to all links in the pages (that are in same domain).
 - a sitemap crawler, give him a sitemap.xml and crawls the urls he
   finds in the sitemap.
@@ -16,14 +16,14 @@ say you want to test your site:
 - if all pages contain meta tags,
 - if all pages contain a title,
 - if you have web analytics tracking in all pages,
-- find out what links are broken
-- batch test your own javascript in an automated way in several(all?)
+- find out what links are broken.
+- batch test your own javascript in an automated way in all
   pages.
 - etc..
 
 Its based on the new version of Selenium that uses Webdriver, thus
 allowing you to(in theory*) use either Firefox, Internet Explorer(when
-on windows), Chrome and HtmlUnit(a GUI-Less browser).
+on windows), Chrome or HtmlUnit(a GUI-Less browser).
 
 *In practice, there's a couple of issues, note that Selenium 2 is in
 beta version: Chrome does not likes to run javascript. And i've had a
@@ -36,7 +36,7 @@ To be used as a library, thus:
 
 #+BEGIN_SRC clojure
 (require '[cov3 :as cov3])
-;; then
+;; then (:ff is short for firefox, use :hu for HtmlUnit, :sh for Chrome, and :ie for Internet Explorer)
 (cov3/crawl :ff "http://al3xandr3.github.com/" '("document.title"))
 ;; or (10 is the sample size to pick from sitemap.xml)
 (cov3/sitemap-crawl :ff "http://al3xandr3.github.com/sitemap.xml" "" "" 10 '("document.title"))
@@ -62,7 +62,7 @@ Then from a new project.clj just include it, like:
 #+BEGIN_SRC clojure
 (defproject myproj "1.0.0"
   :dependencies [[cov3/cov3 "1.0.0"]]
-  ...
+  ...)
 #+END_SRC
 
 * Documentation
