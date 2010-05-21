@@ -1,0 +1,78 @@
+* cov3
+
+This is a crawler library, with 3 diferent flavors of crawlers:
+- the usual crawler, give him a url, and he keeps on going until
+  he checks to all links in the pages (that are in same domain).
+- a sitemap crawler, give him a sitemap.xml and crawls the urls he
+  finds in the sitemap.
+- a step crawler, give him a csv file with the list of pages you want
+  him to go to.
+
+Each crawler gets as input also javascript validations to run on each
+page. The result of the evaluation is written into a file.
+
+This is usefull executing javascript in all pages in an automated way,
+say you want to test your site:
+- if all pages contain meta tags,
+- if all pages contain a title,
+- if you have web analytics tracking in all pages,
+- find out what links are broken
+- batch test your own javascript in an automated way in several(all?)
+  pages.
+- etc..
+
+Its based on the new version of Selenium that uses Webdriver, thus
+allowing you to(in theory*) use either Firefox, Internet Explorer(when
+on windows), Chrome and HtmlUnit(a GUI-Less browser).
+
+*In practice, there's a couple of issues, note that Selenium 2 is in
+beta version: Chrome does not likes to run javascript. And i've had a
+few Out of Memory exceptions with HtmlUnit, so for now i'm using
+mostly Firefox.
+
+* Usage
+
+To be used as a library, thus:
+
+#+BEGIN_SRC clojure
+(require '[cov3 :as cov3])
+;; then
+(cov3/crawl :ff "http://al3xandr3.github.com/" '("document.title"))
+;; or (10 is the sample size to pick from sitemap.xml)
+(cov3/sitemap-crawl :ff "http://al3xandr3.github.com/sitemap.xml" "" "" 10 '("document.title"))
+;; or (assuming you have a csv file with the steps to take, see more on documentation)
+;; for example the line: http://al3xandr3.github.com/,"document.title",,
+(cov3/step-crawl :ff "data/steps.csv")
+#+END_SRC
+
+* Installation
+
+#+BEGIN_SRC shell
+> git clone <url>
+> lein deps
+> lein install
+#+END_SRC
+
+Assuming you have lein installed, when doing lein install on the root
+of the cov3 it will install the built jar into your local maven
+repository, typically: ~/.m2/repository/
+
+Then from a new project.clj just include it, like:
+
+#+BEGIN_SRC clojure
+(defproject myproj "1.0.0"
+  :dependencies [[cov3/cov3 "1.0.0"]]
+  ...
+#+END_SRC
+
+* Documentation
+
+Assuming you have lein installed:
+
+#+BEGIN_SRC shell
+> git clone <url>
+> lein autodoc
+#+END_SRC
+
+Will create some html files into autodoc/ where there's some
+documentation.
