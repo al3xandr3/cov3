@@ -64,7 +64,7 @@ Assuming you have lein installed:
 #+END_SRC
 
 When doing lein install on the root of the cov3 it will install the
-built jar into your local maven repository, typically:
+built jar into your local maven repository, typically into:
 ~/.m2/repository/
 
 Then from a new project.clj just add it to the dependencies, like:
