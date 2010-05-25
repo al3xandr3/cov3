@@ -14,7 +14,7 @@ These validations are usefull to test you site in an automated way,
 say for example, you want to check:
 - if all pages contain meta tags
 - if all pages contain a title
-- if you have web analytics tracking in all pages
+- if al pages contain web analytics tracking
 - find out what links are broken
 - test your own javascript page code in all(or some)
   pages.
