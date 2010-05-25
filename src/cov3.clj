@@ -6,10 +6,11 @@
 (require '[clojure.zip :as zip])
 (require '[clojure.xml :as xml])
 (require '[clojure.contrib.string :as string])
+(require '[clojure.contrib.duck-streams :as stream])
 
-(use 'clojure.contrib.duck-streams)
 (use 'clojure.set) 
 (use 'clojure.contrib.zip-filter.xml)
+
 
 (import '(java.io File))
 (import 'java.io.FileWriter)
@@ -178,10 +179,10 @@
 (defn- save-q [a-url to-see seen]
   "saves a queue to file"
   (do 
-    (spit 
+    (stream/spit 
      (str (domain-of a-url) "_to_see.txt")
      to-see))
-  (spit 
+  (stream/spit 
    (str (domain-of a-url) "_seen.txt")
    seen))
 
@@ -258,7 +259,7 @@
 	 ;; outputs the result to file
 	 (binding [*out* (FileWriter. 		   
 			  (str "result_sitemap-crawl_" 
-			       (domain-of sitemap-url) 
+			       (domain-of sitemap-url) "_"
 			       (.format (SimpleDateFormat. "yyyy-MM-dd") (Date.)) ".csv"))]
 	     (doseq [a-url url-list]
 	       (println (validate-page a-browser a-url validations post-fn))))))))
@@ -280,12 +281,14 @@
    example: http://al3xandr3.github.com/,\"document.title\",\"'jQuery?:'+(typeof jQuery !== 'undefined')\",2+2"
   ([b f] (step-crawl b f (fn[b]())))
   ([b file post-fn]
-     (binding [*out* (FileWriter. 
-		      (str "result_step-crawl_"
-			   (.format (SimpleDateFormat. "yyyy-MM-dd") (Date.)) ".csv"))]
-       (cov3/with-browser browser b
-	 (let [lst (read-csv file)]
-	   (doseq [[url check1 check2 check3] lst]
-	     (println (validate-page browser url (list check1 check2 check3) post-fn))))))))
+     (let [stripname (last (string/split #"\/" file))]
+       (binding [*out* (FileWriter. 
+			(str "result_step-crawl_"
+			     stripname "_"
+			     (.format (SimpleDateFormat. "yyyy-MM-dd") (Date.)) ".csv"))]
+	 (cov3/with-browser browser b
+	   (let [lst (read-csv file)]
+	     (doseq [[url check1 check2 check3] lst]
+	       (println (validate-page browser url (list check1 check2 check3) post-fn)))))))))
 ;; (cov3/step-crawl :ff "data/steps.csv")
 ;; (cov3/step-crawl :ff "data/steps.csv" #(cov3/remove-cookie % "_github_ses"))
